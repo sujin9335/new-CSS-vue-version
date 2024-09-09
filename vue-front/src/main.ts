@@ -1,14 +1,19 @@
+import 'bootstrap/dist/css/bootstrap.min.css'  // Bootstrap CSS 추가
+import 'bootstrap-icons/font/bootstrap-icons.css'; // Bootstrap Icons 추가
+
 import './assets/main.css'
 import './assets/css/style.css'
-import './assets/css/font-awesome.min.css'
+// import './assets/css/font-awesome.min.css'
+import './assets/css/font-awesome.css'
+import './assets/css/tables.css'
 
 import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
-// import 'bootstrap/dist/css/bootstrap.min.css'  // Bootstrap CSS 추가
-import 'bootstrap-icons/font/bootstrap-icons.css'; // Bootstrap Icons 추가
-// import * as bootstrap from 'bootstrap'
+
+
 import axios from './axios'// 엑시오스 추가
+import * as bootstrap from 'bootstrap'
 import { createPinia } from 'pinia' // 피니아 추가
 
 // alertifyjs 추가
@@ -34,7 +39,7 @@ app.use(HighchartsVue, { Highcharts });
 
 
 //전역속성으로 사용할 수 있음
-// app.config.globalProperties.$bootstrap = bootstrap;
+app.config.globalProperties.$bootstrap = bootstrap;
 app.config.globalProperties.$axios = axios;
 app.config.globalProperties.$alertify = alertify;
 

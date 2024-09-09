@@ -2,93 +2,94 @@
 <template>
     <div>
         <div class="top_logo"><img :src="logoUrl" /></div>
-            <div class="header_box">
-                <div class="header_inbox">
-                    <div class="header_con">
-                        <ul id="main_menu" class="gnb">
-                            <li>
-                                <a href="/board" 
-                                    :class="[
-                                        { 'active': $route.path === '/board' },
-                                        {'nav-link px-2': true}
-                                    ]"
-                                ><span>게시판</span></a>
+        <div class="header_box">
+            <div class="header_inbox">
+                <div class="header_con">
+                    <ul id="main_menu" class="gnb">
+                        <li>
+                            <a href="/board" 
+                                :class="[
+                                    { 'active': $route.path === '/board' },
+                                    {'nav-link px-2': true}
+                                ]"
+                            ><span>게시판</span></a>
+                        </li>
+                        <li>
+                            <a href="/user" 
+                                :class="[
+                                    { 'active': $route.path === '/user' },
+                                    {'nav-link px-2': true}
+                                ]"
+                            ><span>유저관리</span></a>
+                        </li>
+                        <li>
+                            <a href="/group" 
+                                :class="[
+                                    { 'active': $route.path === '/group' },
+                                    {'nav-link px-2': true}
+                                ]"
+                            ><span>그룹관리</span></a>
+                        </li>
+                        <li>
+                            <a href="/monitor" 
+                                :class="[
+                                    { 'active': $route.path === '/monitor' },
+                                    {'nav-link px-2': true}
+                                ]"
+                            ><span>구성{{ isModal }}</span></a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- 사이드메뉴 -->
+                <div class="side_menu" >
+                    <div class="dropdown_menu cog_area" style="width: 350px; display: block; z-index: 1001;" v-if="isSideMenu">
+                        
+                        <ul class="cog_box">
+                            <li 
+                                @click="showModal">
+                                <p class="img_02"></p>
+                                <p>구성</p>
                             </li>
-                            <li>
-                                <a href="/user" 
-                                    :class="[
-                                        { 'active': $route.path === '/user' },
-                                        {'nav-link px-2': true}
-                                    ]"
-                                ><span>유저관리</span></a>
+                            <li >
+                                <p class="img_03"></p>
+                                <p>콘텐츠</p>
                             </li>
-                            <li>
-                                <a href="/group" 
-                                    :class="[
-                                        { 'active': $route.path === '/group' },
-                                        {'nav-link px-2': true}
-                                    ]"
-                                ><span>그룹관리</span></a>
-                            </li>
-                            <li>
-                                <a href="/monitor" 
-                                    :class="[
-                                        { 'active': $route.path === '/monitor' },
-                                        {'nav-link px-2': true}
-                                    ]"
-                                ><span>구성</span></a>
+                            <li 
+                                @click="toggleEditMode"
+                                :class="{'on': monitorStore.isEdit}" >
+                                <p class="img_05"></p>
+                                <p>편집모드</p>
                             </li>
                         </ul>
+                        <div class="btn_area mt10 mb20">
+                            <button @click.stop="isSideMenu = false" type="button" class="btn btn-secondary fr" ><i class="fa fa-close"></i> 닫기</button>
+                        </div>
                     </div>
+                    <!-- 사이드메뉴 보이는 아이콘 -->
+                    <ul>
+                        <!-- 구성 -->
+                        <li class="cog_menu" @click="isSideMenu = true"><i class="fa fa-cog"></i></li>
+                        <!-- 사용자정보 -->
+                        <li class="user_menu"><i class="fa fa-user"></i>
+                            <div class="dropdown_menu">
+                                <div class="pro_box2">
+                                    <div class="pro_name">{{ userName }}</div>
+                                    <div class="pro_id">{{ userAuth }}</div>
+                                    <!-- <div class="btn_area tac">
+                                        <button class="btn btn-primary btn-sm" onclick="updateUser()">정보 수정</button>
+                                    </div> -->
+                                </div>
+                                
+                            </div>
+                        </li>
+                        <!-- 로그아웃 -->
+                        <li @click="authStore.logout()"><i class="fa fa-power-off"></i></li>
+                        
+                    </ul>
                 </div>
-                
-            </div>
-        <header
-        class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
-        <div class="col-md-3 mb-2 mb-md-0">
-            <a href="/home" class="d-inline-flex link-body-emphasis text-decoration-none">
-                home
-            </a>
-        </div>
-        
-        
-
-        <div class="btn-group" role="group">
-            <div data-bs-toggle="dropdown" aria-expanded="false" style="cursor: pointer;">
-                <i class="bi bi-gear"></i>
-            </div>
-            <div class="dropdown-menu text-center p-3">
-                <button 
-                    @click="toggleModal"
-                    type="button" class="btn btn-outline-secondary mb-2">구성</button>
-                <button 
-                    @click="toggleEditMode"
-                    type="button" 
-                    :class="[
-                        { 'active': monitorStore.isEdit },
-                        { 'btn btn-outline-secondary': true}
-                    ]"
-                    >편집모드</button>
             </div>
         </div>
-        
-
-        
-        <!-- 로그아웃 버튼 표시 -->
-        <div class="col-md-3 text-end">
-            
-            
-
-            <span>안녕하세요 {{ userName }}님</span>
-            <button type="button" class="btn btn-outline-primary me-2" @click="authStore.logout()">Logout</button>
-            <!-- <button type="button" class="btn btn-outline-primary me-2"
-            onclick="location.href='/'">Login</button> -->
-        </div>
-        
-
-        
-        </header>
-        <modal v-if="isModal" @close="toggleModal"/>
+        <modal v-model:show="isModal" modalId="monitorModal"/>
     </div>
 </template>
 <script setup lang="ts">
@@ -103,9 +104,12 @@
     const monitorStore = useMonitorStore();
 
     const isModal = ref(false); //모달창 on off
+
     const logoUrl = logo;
+    const isSideMenu = ref(false);
 
     const userName = computed(() => authStore.loginInfo?.user_name || "게스트");
+    const userAuth = computed(() => authStore.loginInfo?.user_auth == 1 ? '관리자' : '사용자');
 
     const toggleModal = () => {
         isModal.value = !isModal.value;
@@ -115,6 +119,11 @@
         monitorStore.toggleEditMode();
     };
 
+    const showModal = () => {
+        isModal.value = true;
+    };
+
+
 
 </script>
 <style scoped>
@@ -122,4 +131,8 @@
     color: white;
     background-color: green;
 }
+
+
+
+
 </style>
