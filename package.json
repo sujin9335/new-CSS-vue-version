@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "vue-resizable": "^2.1.7"
+  }
+}
