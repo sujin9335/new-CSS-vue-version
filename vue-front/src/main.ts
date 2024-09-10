@@ -22,11 +22,11 @@ import 'alertifyjs/build/css/alertify.min.css';
 import 'alertifyjs/build/css/themes/default.min.css';
 
 // highchart 추가
-import Highcharts from 'highcharts';
-import HighchartsVue from 'highcharts-vue';
-import Drilldown from 'highcharts/modules/drilldown';
+// import Highcharts from 'highcharts';
+// import HighchartsVue from 'highcharts-vue';
+// import Drilldown from 'highcharts/modules/drilldown';
 
-Drilldown(Highcharts);
+
 
 
 const app = createApp(App);
@@ -35,7 +35,7 @@ const pinia = createPinia();
 
 app.use(pinia);
 app.use(router);
-app.use(HighchartsVue, { Highcharts });
+// app.use(HighchartsVue, { Highcharts });
 
 
 //전역속성으로 사용할 수 있음

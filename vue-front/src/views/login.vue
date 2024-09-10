@@ -2,113 +2,49 @@
 
 
 <template lang="">
-    <div class="container mt-5">
-        <main class="form-signin w-25 mx-auto">
-            <form method="post" id="login_form" action="/loginCheck" @submit.prevent="submitLogin()">
-                <h1 class="h3 mb-3 fw-normal">로그인</h1>
+    <div class="screen-wrapper"><!-- html -->
+		<div class="inner-wrapper"><!-- body -->
+			<div class='box'>
+				<div class='wave -one'></div>
+				<div class='wave -two'></div>
+				<div class='wave -three'></div>
+			</div>
+			<div class="login_pages">
+				<div class="container">
+					<div class="row justify-content-center">
+						<div class="col-5">
+							<div class="card login_area">
+								<div class="card-body p-4">
+									<div class="text-center w-75 m-auto">
+										<span><img src="@/assets/img/logo3.png"></span>
+										<p class="text-muted mb-4 mt-3"></p>
+									</div>
+									<form method="post" id="login_form" action="/loginCheck" @submit.prevent="submitLogin()">
+										<div class="form-group mb-3">
+											<label for="emailaddress">User ID</label>
+											<input class="form-control" type="text" id="id" name="id" v-model="id" required placeholder="User ID">
+										</div>
+										<div class="form-group mb-3">
+											<label for="password">Password</label>
+											<input class="form-control" type="password" required id="pw" name="pw" v-model="pw" placeholder="Password">
+										</div>
+										
+										<div class="form-group mb-0 text-center">
+											<!-- <a class="btn btn-primary btn-block" href="javascript:mysubmit()"> Log In </a> -->
+											<input class="btn btn-primary btn-block" type="submit" value="Log In">
+										</div>
+									</form>
+								</div> <!-- end card-body -->
+							</div>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-                <div class="form-floating">
-                    <input type="text" class="form-control" id="id" name="id" v-model="loginId">
-                    <label for="floatingInput">아이디</label>
-                </div>
-                
-                <div class="form-floating">
-                    <input type="password" class="form-control" id="pw" name="pw" v-model="pw">
-                    <label for="floatingPassword" >비밀번호</label>
-                </div>
-                <div>
-                    <label>
-                        <input type="checkbox" v-model="rememberId"/>
-                        아이디저장
-                    </label>
-                </div>
-
-                <button class="btn btn-primary w-100 py-2" type="submit">로그인</button>
-            </form>
-            <button class="btn btn-secondary w-100 py-2 mt-2" type="submit" @click="modalClear" data-bs-toggle="modal"
-            data-bs-target="#userRegis">회원가입</button>
-            <div class="text-center">
-                <span>관리자의 승인 후 로그인 가능</span>
-            </div>
-            <div class="text-center">
-                <p v-if="msgError" style="color: red;">{{ msgError }}</p>
-            </div>
-        </main>
-    </div>
-
-    <!-- 회원가입 모달창 -->
-    <div class="modal fade" id="userRegis" data-bs-backdrop="static" data-bs-keyboard="false"
-        tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-custom">
-            <div class="modal-content">
-
-                <div class="modal-body">
-                    <div class="container text-center" id="regisContent">
-                        <div class="row">
-
-                            <div class="col-2 pt-3">
-                                <h3>아이디</h3>
-                            </div>
-                            <div class="col-8 text-start px-4 pt-3 in-title" id="login_id">
-                                <input type="text" class="w-80" :disabled="isInputIdDisabled" v-model="regisId">
-                                <button :id="btnCheckId" :class="btnCheckClass" @click="btnCheckClick">{{ btnCheckText }}</button>
-                            </div>
-                            
-
-                            <div class="col-1 editDel">
-                                <div id="id" style="display: none;"></div>
-                                <div id="flag" style="display: none;"></div>
-                            </div>
-
-                            <div class="col-1">
-                                <!-- <button type="button" class="btn btn-dark" data-bs-dismiss="modal" onclick="close_modal()">닫기</button> -->
-                                <button type="button" class="btn btn-dark"
-                                    data-bs-dismiss="modal" ref="modalClose">닫기</button>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2 pt-3 pw">
-                                <h3>비밀번호</h3>
-                            </div>
-                            <div class="col-10 text-start px-4 pt-3 in-title pw" id="pw">
-                                <input type="password" class="w-80 d-block m-1" id="pw_ch1" v-model="regisPw1" @input="checkPw" placeholder="비밀번호">
-                                <input type="password" class="w-80 m-1" id="pw_ch2" v-model="regisPw2" @input="checkPw" placeholder="비밀번호 확인">
-                                <p id="checkPwText" :style="{color: checkPwStyle}">{{ checkPwText }}</p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2 pt-3">
-                                <h3>이름</h3>
-                            </div>
-                            <div class="col-10 text-start p-4 " id="name">
-                                <input type="text" class="w-100" v-model="regisName">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2 pt-3">
-                                <h3>핸드폰번호</h3>
-                            </div>
-                            <div class="col-10 text-start p-4" id="tel">
-                                <input type="text" class="w-100" placeholder="010-1234-1234 형식으로 써주세요" v-model="regisTel">
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-2 pt-3">
-                                <h3>이메일</h3>
-                            </div>
-                            <div class="col-8 text-start p-4" id="mail">
-                                <input type="text" class="w-100" v-model="regisEmail">
-                            </div>
-                            <div class="col-2">
-                                <button @click="regisUser" class="btn btn-info">가입</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 </template>
 <script lang="ts">
 import { mapWritableState } from "pinia";
@@ -119,7 +55,7 @@ export default {
     data() {
         return {
             //로그인
-            loginId: "",
+            loginId: "sj",
             pw: "sujin1!",
             msgError: "",
             //회원가입
@@ -348,14 +284,122 @@ export default {
     // }
 };
 </script>
-<style>
-#regisContent div {
-    border: 1px solid #ccc;
-    border-collapse: collapse;
-    padding: 3px;
+<style scoped>
+.screen-wrapper{background:url(@/assets/img/full_bg.jpg) no-repeat;background-size: cover;animation:efect1 2s ease-out 1 forwards; height: 100vh;}
+/* .inner-wrapper{background: linear-gradient(45deg, rgba(0,0,0,0) 68%, #2fa1f3 32%);height: 100%; color: #cacaca;} */
+.inner-wrapper{background:linear-gradient(rgba(0,0,0,.4),  rgba(38,129,214,.2));backdrop-filter: blur(0px);transition: 1s;overflow: hidden; background-size: cover;height: 100vh;}
+
+.container{padding-top:250px}
+.card {margin-bottom:24px;box-shadow: 0px 0px 500px 20px #000;border: 1px solid #fff;}@media (min-width:576px) {.container {max-width:1140px}}
+@media (min-width:576px) {.container {max-width:1140px}}
+@media (min-width:768px) {.container {max-width:1140px}}
+@media (min-width:992px) {.container {max-width:1140px}}
+@media (min-width:1200px) {.container {max-width:1140px}}
+
+/* .login_logo{background:#1a1b20 url(/resources/dist/img/login_bg.jpg) no-repeat top center;background-size:cover; height: 400px; border-radius: 20px;padding: 80px 10px;color:#fff}
+.login_bg{background: linear-gradient(to top, #f5f5f5 50%, #1a1b20 50%);border-radius: 52px;box-shadow: 0 0 30px #005b9c;border: 1px solid #5485a9;}
+.login_area{background: linear-gradient(45deg, #0f1216 80%, #2fa1f3 20%); border-radius: 20px}
+.login-box{margin:100px 50px;}
+.login-box .form-control{background: #fff;border: 1px solid #d4d4d4; color:#000}
+.login-box .form-group {margin-bottom: 20px;} */
+
+html{background:url(/img/full_bg.jpg) no-repeat;background-size: cover;animation:efect1 2s ease-out 1 forwards;}
+/* body{background: rgba(0,0,0,.7);backdrop-filter: blur(5px);transition: 1s;overflow: hidden; } */
+/* html{background:#000;background-size: cover;animation:efect1 2s ease-out 1 forwards; min-width: 1440px} */
+body{background:linear-gradient(rgba(0,0,0,.4),  rgba(38,129,214,.2));backdrop-filter: blur(0px);transition: 1s;overflow: hidden; background-size: cover;height: 100vh;}
+
+.login_logo{background:#1a1b20 url(/resources/dist/img/login_bg.jpg) no-repeat top center;background-size:cover; height: 400px; border-radius: 20px;padding: 80px 10px;color:#fff}
+.login_bg{background: linear-gradient(to top, #f5f5f5 50%, #1a1b20 50%);border-radius: 52px;box-shadow: 0 0 30px #000;border: 1px solid #5485a9;}
+.login_area{background: rgba(0,0,0,.5); border-radius: 20px; z-index: 2000;}
+.login-box{margin:100px 50px;}
+.login-box .form-control{background: #fff;border: 1px solid #d4d4d4; color:#000}
+.login-box .form-group {margin-bottom: 20px;}
+.form-control,:deep(.form-control){border: 1px solid #ffffff;background: transparent;}
+.login_pages{animation:efect2 2s ease-out 1 forwards;position: absolute;z-index: 100000;width: 100%;}
+
+.modal-backdrop{background: rgba(255,255,255,.5);backdrop-filter: blur(25px);}
+.form-control:focus{background-color: transparent;}
+select option,:deep(select option) {background: #000;}
+/* .form-control{border: 1px solid #00a1ff;} */
+
+/* input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active
+{
+   -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #a8b5c3 !important;
+} */
+.realperson-text{font-size: 10px}
+
+
+
+@keyframes efect1 {
+	0%{opacity: 0}
+	50%{opacity: 1}
+	100%{opacity: 1}
 }
 
-.modal-custom {
-    max-width: 50% !important;
+@keyframes efect2 {
+	0%{margin-top:-100%;opacity: 0}
+	50%{margin-top:0;opacity: 0.5}
+	100%{margin-top:0;opacity: 1}
+}
+@keyframes efect3 {
+	0%{opacity: 0}
+	50%{opacity: 0.5}
+	100%{opacity: 1}
+}
+.box {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  position: absolute;
+  overflow: hidden;
+  transform: translate3d(0, 0, 0);
+  animation:efect3 3s ease-out 1 forwards;
+  z-index: 1000;
+}
+
+.wave {
+  opacity: .3;
+  position: absolute;
+  top: 8%;
+  left: 50%;
+  background: #00abff;
+  width: 750px;
+  height: 750px;
+  margin-left: -375px;
+  margin-top: 50px;
+  transform-origin: 50% 48%;
+  border-radius: 43%;
+  animation: drift 20000ms infinite linear;
+  filter: blur(2px);
+}
+
+.wave.-three {
+  animation: drift 40000ms infinite linear;
+}
+
+.wave.-two {
+  animation: drift 60000ms infinite linear;
+  opacity: .1;
+  background: #00d7ff;
+}
+
+.box:after {
+  content: '';
+  display: block;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 11;
+  transform: translate3d(0, 0, 0);
+}
+
+@keyframes drift {
+  from { transform: rotate(0deg); }
+  from { transform: rotate(360deg); }
 }
 </style>

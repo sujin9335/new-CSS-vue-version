@@ -1,6 +1,6 @@
 <template>
   <Header class="top_bar" v-if="isLogin"></Header>
-  <router-view></router-view>
+  <router-view  class="ui-layout-center"></router-view>
 </template>
 
 <script lang="ts">

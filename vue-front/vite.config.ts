@@ -7,7 +7,7 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   server: {
     host: '0.0.0.0', //모든 ip에서 접속가능하게
-    port: 25001, // 원하는 포트 변경
+    port: 25003, // 원하는 포트 변경
     proxy: { //axios 설정
       "/a": {
         target: "http://localhost:25002/",

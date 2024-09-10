@@ -15,26 +15,7 @@ const router = createRouter({
       name: 'test',
       component: () => import('../views/test.vue')
     },
-    {
-      path: '/test2',
-      name: 'test2',
-      component: () => import('../views/test2.vue')
-    },
-    {
-      path: '/test3',
-      name: 'test3',
-      component: () => import('../views/test3.vue')
-    },
-    {
-      path: '/test4',
-      name: 'test4',
-      component: () => import('../views/test4.vue')
-    },
-    {
-      path: '/test5',
-      name: 'test5',
-      component: () => import('../views/test5.vue')
-    },
+    
     {
       path: '/monitor',
       name: 'monitor',

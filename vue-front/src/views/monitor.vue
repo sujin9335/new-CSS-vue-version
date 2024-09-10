@@ -1,82 +1,79 @@
 <template>
-    <div class="ui-layout-center" >
+    <div>
         <div class="container-fluid" style="height: 1111px;">
             <hr class="top_re">
                 <div class="breadcrumb">
                     <div class="breadcrumb-item">
-                        <i class="fa fa-home"></i> / 
+                        <i class="fa fa-home"></i> /
                     </div> 
                     구성
                 </div>
             <hr>
-        <div>
-            <editMonitor v-for="monitor in monitorList" 
-                :key="monitor.monitor_id"
-                :data="monitor" 
-                :editor="isEditMode"
-                :selectedMonitor="selectedMonitor"
-                :setStyle="setStyle"
-                :class="{ 'selected': isEditMode && selectedMonitor === monitor.monitor_id,}" 
-                @click="selectMonitor(monitor)"
-                @update="updateStyle"
-            />
-        </div>
-        <div
-            :style="{ display: selectedMonitor !== null ? 'block' : 'none' }"
-            class="controls container text-center">
-            <div class="row">
-                
-                <div class="col-5">
-                    <div class="row">
-                        <div class="row row-cols-2">
-                            <div class="col border">가로</div>
-                            <div class="col border">
-                                <input 
-                                    type="number"
-                                    v-model.number="divWidth"
-                                    @input="inputStyle"
-                                /> 
-                            </div>
-                            <div class="col border">세로</div>
-                            <div class="col border">
-                                <input 
-                                    type="number"
-                                    v-model.number="divHeight"
-                                    @input="inputStyle"
-                                /> 
-                            </div>
-                        </div>
+            <div style="position: relative;">
+                <editMonitor v-for="monitor in monitorList" 
+                    :key="monitor.monitor_id"
+                    :data="monitor" 
+                    :editor="isEditMode"
+                    :selectedMonitor="selectedMonitor"
+                    :setStyle="setStyle"
+                    
+                    @click="selectMonitor(monitor)"
+                    @update="updateStyle"
+                />
+            </div>
+            <div 
+                :style="{ display: selectedMonitor !== null ? 'block' : 'none' }"
+                class="controll_box3" style="padding: 10px;">
+                <div class="controll_item pl0 pr0">
+                    <div class="right"></div>
+                    <br>
+                    <div class="right" style="font-size: 30px;">
+                        <i class="bi bi-grip-vertical"></i>
+                        <!-- <div class="mb10"></div> -->
                     </div>
                 </div>
-                <div class="col-5">
-                    <div class="row">
-                        <div class="row row-cols-2">
-                            <div class="col border">x축</div>
-                            <div class="col border">
-                                <input 
-                                    type="number"
-                                    v-model.number="divX"
-                                    @input="inputStyle"
-                                />     
-                            </div>
-                            <div class="col border">y축</div>
-                            <div class="col border">
-                                <input 
-                                    type="number"
-                                    v-model.number="divY"
-                                    @input="inputStyle"
-                                />     
-                            </div>
-                        </div>
+                <div class="controll_item">
+                    <div class="left">높이</div>
+                    <div class="right">
+                        <input type="text" 
+                        v-model.number="divHeight"
+                        @input="inputStyle"
+                        style="width: 75px;"> px
+                    </div>
+                    <br>
+                    <div class="left">넓이</div>
+                    <div class="right">
+                        <input type="text" 
+                        v-model.number="divWidth"
+                        @input="inputStyle"
+                        style="width: 75px;"> px
                     </div>
                 </div>
-                <div class="col-2 mt-2">
-                    <button
-                    @click="delMonitor"
-                    >삭제</button>
+                <div class="controll_item">
+                    <div class="left">X 축</div>
+                    <div class="right">
+                        <input type="text" 
+                        v-model.number="divX"
+                        @input="inputStyle"
+                        style="width: 75px;"> px
+                    </div>
+                    <br>
+                    <div class="left">Y 축</div>
+                    <div class="right">
+                        <input type="text" 
+                        v-model.number="divY"
+                        @input="inputStyle"
+                        style="width: 75px;"> px
+                    </div>
+                </div>
+                <div class="controll_item">
+                    <div class="right"></div>
+                    <br>
+                    <div class="right">
+                        <button class="btn btn-primary btn-sm fl ml10 mb20">구성 삭제</button>
+                    </div>
                 </div>
             </div>
-        </div>
         </div>
     </div>
 
@@ -187,10 +184,7 @@
 
 </script>
 <style scoped>
-    .selected {
-        border: 2px dashed red; /* 원하는 테두리 색상으로 변경 */
-        box-sizing: border-box;
-    }    
+     
     .controls {
         border : 1px solid black;
         position: absolute;

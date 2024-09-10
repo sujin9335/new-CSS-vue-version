@@ -1,14 +1,17 @@
 <template>
     <div>
-        <highcharts 
+        <div :id="id" style="min-width: 100%; height: 300px; margin: 0 auto"></div>
+        <!-- <highcharts 
         :options="chart"
         style="width: 100%; height: 100%;"
-        ></highcharts>
+        ></highcharts> -->
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref, defineProps, computed } from 'vue';
+import Highcharts from 'highcharts';
+import { ref, defineProps, computed, onMounted} from 'vue';
+import HighchartsVue from 'highcharts-vue';
 
 interface Monitor {
     monitor_id: string;
@@ -23,7 +26,7 @@ interface Monitor {
 
 const props = defineProps<{data: Monitor; }> ();
 
-
+const id = ref(props.data.monitor_id);
 const title = ref(props.data.monitor_title);
 const content = ref(props.data.monitor_content);
 
@@ -34,7 +37,7 @@ const chartData = ref([{ name: '서울', y: 120 },
 const drillData = ref([]);
 
 
-const chart = computed(() => ({
+const chartOptions: Highcharts.Options = {
             
     chart: {
             backgroundColor: 'transparent',
@@ -84,7 +87,11 @@ const chart = computed(() => ({
             },
             series: drillData.value
         }
-}));
+};
+
+onMounted(() => {
+    Highcharts.chart(id.value, chartOptions);
+});
 
 </script>
 

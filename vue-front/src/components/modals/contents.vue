@@ -2,36 +2,92 @@
     <!-- <div v-if="isVisible" @click.self="closeModal"> -->
     <div :id="modalId" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="full-width-modalLabel" aria-hidden="true">
         <div class="modal-dialog modal-full">
-            <div class="modal-content">
+            <div class="modal-content" >
                 <div class="modal-header">
                     <h4 class="modal-title" id="full-width-modalLabel">구성관리</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
                 </div>
                 <div class="modal-body">
                     <div class="low">
-                        <div class="col-5">
+                        <div class="col-5 fl pannel_area3 p-2">
                             <div class="card-box">
                                 <div class="right_top"><i class="fa fa-window-restore"></i><i class="fa fa-close"></i></div>
                                 <h4 class="header-title"><i class="fa fa-list"></i>구성리스트</h4>
-                                <div class="mt10 text-left">
-                                    컨텐츠 안에 들어가는 카드 박스
+                                <div class="mt10 text-left" style="height: 500px;">
+                                    <table class="scrollTbody table table-dark table-hover" >
+                                        <thead>
+                                            <tr>
+                                                <th class="tac" width="20%" id="chkTh">
+                                                    <div class="checkbox">
+                                                        <input 
+                                                            @change="toggleAllCheckboxes"
+                                                            v-model="isAllChecked"
+                                                            id="chkAll" type="checkbox"><label for="chkAll"></label>
+                                                    </div>
+                                                </th>
+                                                <th class="tac" style="text-align: center">타이틀</th>
+                                                <th class="tac" style="text-align: center">콘텐츠</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr
+                                                v-for="(monitor, index) in monitorStore.monitorList" 
+                                                :key="monitor.monitor_id"
+                                            >
+                                                <td>
+                                                    <div class="checkbox">
+                                                        <input 
+                                                            v-model="checkedItems[index]"
+                                                            @change="checkIfAllSelected"
+                                                            :id="`chk${index}`" type="checkbox"><label :for="`chk${index}`"></label>
+                                                        <input type="hidden" :value="monitor.monitor_id">
+                                                    </div>
+                                                </td>
+                                                <td class="tac" @click="selectMonitor(monitor)">{{ monitor.monitor_title }}</td>
+                                                <td class="tac" @click="selectMonitor(monitor)">{{ monitor.monitor_content }}차트</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <div class=" tar">
+                                        <button  @click="delMonitors" type="button" class="btn btn-secondary mr5" ><i class="fa fa-trash"></i> 구성 삭제</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-7">
+                        <div class="col-7 fr p-2">
                             <div class="card-box">
                                 <div class="right_top"><i class="fa fa-window-restore"></i><i class="fa fa-close"></i></div>
                                 <h4 class="header-title"><i class="fa fa-list"></i>구성정보</h4>
+                                <div class="form-group form-setup row">
+                                    <label class="col-3 col-form-label">콘텐츠</label>
+                                    <div class="col-sm-9">
+                                            <select 
+                                                v-model="typeSelect"
+                                                class="form-control">
+                                            <option value="bar">bar차트</option>
+                                            <option value="pie">pie차트</option>
+                                            <option value="line">line차트</option>
+                                        </select>
+                                    </div>
+                                </div>
+
                                 <div class="mt10 text-left">
-                                    컨텐츠 안에 들어가는 카드 박스
+                                    <div class="form-group form-setup row">
+                                        <label class="col-3 col-form-label">타이틀</label>
+                                        <div class="col-sm-9">
+                                            <input 
+                                                v-model="titleInput"
+                                                type="text" class="form-control">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal">닫기</button>
-                    <button type="button" class="btn btn-primary waves-effect waves-light">저장</button>
+                    <button type="button" class="btn btn-secondary waves-effect" data-dismiss="modal" @click="modalClose">닫기</button>
+                    <button @click="upsertMonitor" type="button" class="btn btn-primary waves-effect waves-light">저장</button>
                 </div>
             </div>
         </div>
@@ -51,12 +107,10 @@
     const isAllChecked = ref(false);//체크박스 모두선택상태
     const checkedItems = ref(Array(monitorStore.monitorList.length).fill(false));
 
-    const props = defineProps({
-        show: Boolean,
-        modalId: String
-    });
+    const props = defineProps<{ show: Boolean; modalId: String; }>();
+    ;
 
-    const emit = defineEmits(['update:show']);
+    const emit =  defineEmits<{ (event: 'update:show', value: boolean): void; }>();
     const modalInstance = ref<Modal | null>(null);
     
 
@@ -131,27 +185,35 @@
     const open = (shouldShow: boolean) => { // 모달창 열기
         if (modalInstance.value) {
             if (shouldShow) {
-            modalInstance.value.show();
+                modalInstance.value.show();
             } else {
-            modalInstance.value.hide();
+                modalInstance.value.hide();
             }
         }
     };
 
+    const modalClose = () => {
+        emit('update:show', false); // 부모 컴포넌트에 모달이 닫혔음을 알림
+    };
+
     onMounted(() => {
-    const modalEl = document.getElementById(props.modalId);
-        if (modalEl) {
-            modalInstance.value = new Modal(modalEl);
-            modalEl.addEventListener('hide.bs.modal', () => {
-                emit('update:show', false);
-            });
-            open(props.show);
-        }
+        const modalEl = document.getElementById(props.modalId);
+            if (modalEl) {
+                modalInstance.value = new Modal(modalEl);
+                modalEl.addEventListener('hide.bs.modal', () => { //모달창 닫힐 때 이벤트(hide.bs.modal 가 모달창 닫힐 때 발생하는 이벤트)
+                    emit('update:show', false);
+                });
+                open(props.show);
+            }
     });
 
     watch(() => props.show, (newValue) => {
         open(newValue);
     });
+
+    watch(() => monitorStore.monitorList.length, (newLength) => { //체크박스 배열 길이 변경
+        checkedItems.value = Array(newLength).fill(false);
+    }, { immediate: true });
 
     onMounted(monitorList); // 모달창이 열릴 때마다 모니터링 리스트를 가져옴
 

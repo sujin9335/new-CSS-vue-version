@@ -7,36 +7,16 @@
                 <div class="header_con">
                     <ul id="main_menu" class="gnb">
                         <li>
-                            <a href="/board" 
-                                :class="[
-                                    { 'active': $route.path === '/board' },
-                                    {'nav-link px-2': true}
-                                ]"
-                            ><span>게시판</span></a>
+                            <a href="/board"><span>게시판</span></a>
                         </li>
                         <li>
-                            <a href="/user" 
-                                :class="[
-                                    { 'active': $route.path === '/user' },
-                                    {'nav-link px-2': true}
-                                ]"
-                            ><span>유저관리</span></a>
+                            <a href="/user"><span>유저관리</span></a>
                         </li>
                         <li>
-                            <a href="/group" 
-                                :class="[
-                                    { 'active': $route.path === '/group' },
-                                    {'nav-link px-2': true}
-                                ]"
-                            ><span>그룹관리</span></a>
+                            <a href="/group"><span>그룹관리</span></a>
                         </li>
                         <li>
-                            <a href="/monitor" 
-                                :class="[
-                                    { 'active': $route.path === '/monitor' },
-                                    {'nav-link px-2': true}
-                                ]"
-                            ><span>구성{{ isModal }}</span></a>
+                            <a href="/monitor"><span>구성</span></a>
                         </li>
                     </ul>
                 </div>
@@ -46,7 +26,7 @@
                         
                         <ul class="cog_box">
                             <li 
-                                @click="showModal">
+                                @click="toggleModal">
                                 <p class="img_02"></p>
                                 <p>구성</p>
                             </li>
@@ -68,7 +48,9 @@
                     <!-- 사이드메뉴 보이는 아이콘 -->
                     <ul>
                         <!-- 구성 -->
-                        <li class="cog_menu" @click="isSideMenu = true"><i class="fa fa-cog"></i></li>
+                        <li class="cog_menu"
+                            :class="{'on': monitorStore.isEdit}"
+                            @click="isSideMenu = true"><i class="fa fa-cog"></i></li>
                         <!-- 사용자정보 -->
                         <li class="user_menu"><i class="fa fa-user"></i>
                             <div class="dropdown_menu">
@@ -119,18 +101,13 @@
         monitorStore.toggleEditMode();
     };
 
-    const showModal = () => {
-        isModal.value = true;
-    };
+    
 
 
 
 </script>
 <style scoped>
-.active {
-    color: white;
-    background-color: green;
-}
+
 
 
 
