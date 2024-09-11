@@ -23,13 +23,11 @@ public class LoginService {
 
         list=ld.loginCheck(id, shaPw);
 
-        // System.out.println(list);
-
         return list;
     }
 
-    public void updateLockCnt(String id) {
-        ld.updateLockCnt(id);
+    public void updateLockCnt(String id, int cnt) {
+        ld.updateLockCnt(id, cnt);
 
 
     }

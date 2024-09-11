@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.codvill.comm.Utils;
 import com.codvill.service.LoginService;
 import com.codvill.service.UserService;
 
@@ -49,8 +50,8 @@ public class LoginController {
         String pw="";
 
         if (mapLoginInfo.size() > 0) {
-            id=mapLoginInfo.get("id").toString();
-            pw=mapLoginInfo.get("pw").toString();
+            id=Utils.nvl((String)mapLoginInfo.get("id"), "");
+            pw=Utils.nvl((String)mapLoginInfo.get("pw"), "");
         }
 
         Map<String, Object> map=ls.loginCheck(id,pw);
@@ -70,8 +71,9 @@ public class LoginController {
                 if(map.get("id") != null) { //로그인시 비번만 틀렸을경우
                     //로그인 실패 카운트 증가 
                     // model.addAttribute("msg", "비밀번호를 " + (Integer.parseInt(map.get("user_lock_cnt").toString()) +1) + "회 잘못 입력하셨습니다");
-                    ls.updateLockCnt(id);
-                    loginObj.put("msg", "비밀번호를 " + (Integer.parseInt(map.get("user_lock_cnt").toString()) +1) + "회 잘못 입력하셨습니다");
+                    int cnt=(Integer) map.get("user_lock_cnt")+1; //로그인 실패 횟수
+                    loginObj.put("msg", "비밀번호를 " + cnt + "회 잘못 입력하셨습니다");
+                    ls.updateLockCnt(id, cnt);
 
                 }else { 
                     

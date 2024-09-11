@@ -5,7 +5,7 @@
             <div class="modal-content" >
                 <div class="modal-header">
                     <h4 class="modal-title" id="full-width-modalLabel">구성관리</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true" @click="modalClose">×</button>
                 </div>
                 <div class="modal-body">
                     <div class="low">

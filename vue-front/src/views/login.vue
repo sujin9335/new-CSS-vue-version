@@ -16,13 +16,13 @@
 							<div class="card login_area">
 								<div class="card-body p-4">
 									<div class="text-center w-75 m-auto">
-										<span><img src="@/assets/img/logo3.png"></span>
+										<span><img src="@/assets/proj/codvill/img/logoL.png"></span>
 										<p class="text-muted mb-4 mt-3"></p>
 									</div>
 									<form method="post" id="login_form" action="/loginCheck" @submit.prevent="submitLogin()">
 										<div class="form-group mb-3">
 											<label for="emailaddress">User ID</label>
-											<input class="form-control" type="text" id="id" name="id" v-model="id" required placeholder="User ID">
+											<input class="form-control" type="text" id="id" name="id" v-model="loginId" required placeholder="User ID">
 										</div>
 										<div class="form-group mb-3">
 											<label for="password">Password</label>
@@ -127,7 +127,7 @@ export default {
                     localStorage.removeItem('rememberId');
                 }
 
-                await this.$router.push({ name: "monitor" });
+                await this.$router.push({ name: "main" });
                 // window.location.href = 'http://localhost:25000/highChart/';
             }
             console.log(result);

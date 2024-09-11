@@ -1,10 +1,12 @@
 <template>
     <div>
-        <div :id="id" style="min-width: 100%; height: 300px; margin: 0 auto"></div>
-        <!-- <highcharts 
-        :options="chart"
-        style="width: 100%; height: 100%;"
-        ></highcharts> -->
+        <div>
+            <h4 class="header-title_dash">
+                <div class="head_tit_name">{{title}}</div>
+            </h4>
+        </div>
+        <div :id="id" style="width: 100%; height: 80%;"></div>
+
     </div>
 </template>
 
@@ -12,6 +14,9 @@
 import Highcharts from 'highcharts';
 import { ref, defineProps, computed, onMounted} from 'vue';
 import HighchartsVue from 'highcharts-vue';
+import Highcharts3D from 'highcharts/highcharts-3d'
+
+Highcharts3D(Highcharts)
 
 interface Monitor {
     monitor_id: string;
@@ -40,53 +45,92 @@ const drillData = ref([]);
 const chartOptions: Highcharts.Options = {
             
     chart: {
-            backgroundColor: 'transparent',
-            type: content.value
-        },
-        credits: {
-            enabled: false  // 우측 하단 로고 제거
-        },
-        title: {
-            text: title.value
-        },
-        tooltip: {
-            valueSuffix: '명'
-        },
-        // x축 라벨 표시
-        xAxis: {
-            type: 'category'
-        },
-
-        plotOptions: {
-            series: {
-                allowPointSelect: true,
-                cursor: 'pointer',
-                dataLabels: {
-                    enabled: true,
-                    format: '{point.name}: {point.y}명'
-                }
-                
-
-            }
-        },
-        exporting: {
-            enabled: false // 우측 상단 메뉴를 비활성화합니다
-        },
-        series: [
-            {
-                name: '유저',
-                colorByPoint: true,
-                data: chartData.value
-            }
-        ],
-        drilldown: {
-            breadcrumbs: {
-                position: {
-                    align: 'center'
-                }
-            },
-            series: drillData.value
+        backgroundColor: 'transparent',
+        type: content.value,
+        options3d: {
+          enabled: true, // 3D 활성화
+          alpha: content.value == 'pie' ? 45 : 5,
+          beta: 0
         }
+        
+    },
+    credits: {
+        enabled: false  // 우측 하단 로고 제거
+    },
+    title: {
+        text: ''
+    },
+    tooltip: {
+        valueSuffix: '명'
+    },
+    // x축 라벨 표시
+    xAxis: {
+        type: 'category',
+        labels: {
+            style: {
+                color: '#fff' // x축 레이블 색상
+            }
+        },
+        gridLineColor: '#fff' // x축 그리드 선 색상
+    },
+    yAxis: {
+        labels: {
+            style: {
+                color: '#fff' // y축 레이블 색상
+            }
+        },
+        gridLineColor: '#fff', // y축 그리드 선 색상
+        title: {
+            text: '',
+            style: {
+                color: '#000' // y축 제목 색상
+            }
+        }
+    },
+    legend: {
+        itemStyle: {
+            color: '#fff' // 시리즈 이름 색상
+        }
+    },
+
+    plotOptions: {
+        pie: {
+            innerSize: 30,
+            depth: 40
+        },
+        series: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+                enabled: true,
+                format: content.value == 'pie' ? '{point.name}: {point.y}명 ({point.percentage:.1f}%)' : '{point.name}: {point.y}명', 
+                style: {
+                    color: '#fff',
+                    fontSize: '13px',
+                    fontWeight: 'bold'
+                }
+            }
+        }
+    },
+    exporting: {
+        enabled: false // 우측 상단 메뉴를 비활성화합니다
+    },
+    series: [
+        {
+            name: '유저',
+            colorByPoint: true,
+            data: chartData.value,
+            
+        }
+    ],
+    drilldown: {
+        breadcrumbs: {
+            position: {
+                align: 'center'
+            }
+        },
+        series: drillData.value
+    }
 };
 
 onMounted(() => {
@@ -96,5 +140,15 @@ onMounted(() => {
 </script>
 
 <style scoped>
-/* Add your component styles here */
+.chart-wrapper {
+    flex: 1; /* 차트가 가용 공간을 모두 차지하도록 설정 */
+    display: flex;
+    align-items: stretch;
+}
+
+.chart-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
 </style>

@@ -28,4 +28,26 @@ create table tbl_monitor (
 
 )
 
+create table tbl_board (
+	board_id varchar(50) PRIMARY KEY,
+	board_title varchar(100) not null,
+	board_content varchar(4000) not null,
+	user_id varchar(50) not null,
+	board_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+	board_view int(30) default 0
+);
+
+drop table tbl_board ;
+
+create table tbl_file (
+	file_id varchar(50) PRIMARY KEY,
+	file_name varchar(300) not null,
+	file_extension varchar(30) not null,
+	file_path varchar(300) not null,
+	board_id varchar(50),
+	FOREIGN KEY (board_id) REFERENCES tbl_board(board_id)
+);
+
+drop table tbl_file;
+
 commit;

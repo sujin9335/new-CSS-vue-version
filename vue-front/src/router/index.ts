@@ -17,8 +17,8 @@ const router = createRouter({
     },
     
     {
-      path: '/monitor',
-      name: 'monitor',
+      path: '/main',
+      name: 'main',
       component: () => import('../views/monitor.vue')
     },
     {

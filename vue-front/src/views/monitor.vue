@@ -1,14 +1,12 @@
 <template>
     <div>
         <div class="container-fluid" style="height: 1111px;">
-            <hr class="top_re">
-                <div class="breadcrumb">
-                    <div class="breadcrumb-item">
-                        <i class="fa fa-home"></i> /
-                    </div> 
-                    구성
-                </div>
-            <hr>
+            <div class="breadcrumb">
+                <div class="breadcrumb-item">
+                    <i class="fa fa-home"></i> /
+                </div> 
+                구성
+            </div>
             <div style="position: relative;">
                 <editMonitor v-for="monitor in monitorList" 
                     :key="monitor.monitor_id"

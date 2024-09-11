@@ -1,5 +1,11 @@
-import 'bootstrap/dist/css/bootstrap.min.css'  // Bootstrap CSS 추가
-import 'bootstrap-icons/font/bootstrap-icons.css'; // Bootstrap Icons 추가
+import 'bootstrap/dist/css/bootstrap.min.css'
+import './assets/css/font-awesome.min.css'
+import 'bootstrap-icons/font/bootstrap-icons.min.css'
+
+//alertify.js
+import 'alertifyjs/build/css/alertify.min.css'
+import 'alertifyjs/build/css/themes/default.min.css'
+
 
 import './assets/main.css'
 import './assets/css/style.css'
@@ -35,7 +41,7 @@ const pinia = createPinia();
 
 app.use(pinia);
 app.use(router);
-// app.use(HighchartsVue, { Highcharts });
+// app.use(HighchartsVue);
 
 
 //전역속성으로 사용할 수 있음
