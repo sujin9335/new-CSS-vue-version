@@ -23,8 +23,10 @@ export default {
 
 </script>
 
-<style >
-
+<style scope>
+.top_bar {
+  z-index: 100 !important;
+}
 
 
 </style>

@@ -19,7 +19,7 @@
                                 <div>
                                     <select v-model="searchType" class="form-control">
                                         <option value="board_title">제목</option>
-                                        <option value="board_content">내용</option>
+                                        <option value="user_nickname">작성자</option>
                                     </select>
                                 </div>
                             </div>
@@ -43,7 +43,9 @@
                                     <button class="btn btn-secondary mr-lg-4 fr">
                                         <i class="fa fa-rotate-left"></i> 초기화
                                     </button>
-                                    <button class="btn btn-primary ml fr">
+                                    <button 
+                                        @click="list(true)"
+                                        class="btn btn-primary ml fr">
                                         <i class="fa fa-search"></i> 검색
                                     </button>
                                     <button class="btn btn-primary ml fr" @click="consoleTest">
@@ -61,7 +63,7 @@
                     <div class="card-box">
                         <div class="right_top"><i class="fa fa-window-restore"></i></div>
                         <h4 class="header-title"><i class="fa fa-list"></i>게시판</h4>
-                        <div class="mt10 text-left">
+                        <div class="mt10 text-left" style="height: 600px;">
                             <table class="scrollTbody table table-dark table-hover" >
                                 <thead>
                                     <tr>
@@ -85,7 +87,7 @@
                                         </th>
                                     </tr>
                                 </thead>
-                                <tbody>
+                                <tbody class="scrollable-tbody">
                                     <tr v-if="boardList && boardList.length === 0">
                                         <td colspan="6" style="text-align: center;">게시글이 존재하지 않습니다</td>
                                     </tr>
@@ -115,9 +117,22 @@
                                 </tbody>
                             </table>
                             <div class="col-12 tac">
-                                <div>페이징</div>
+                                <paging
+                                    :current="pageCurrent"
+                                    :totalPage="totalCount"
+                                />
+
+
+                                
                                 <div class="fr">
-                                    <button class="btn btn-primary mt20" icon="ADD">
+                                    <button 
+                                        @click="isGetModal = true"
+                                        class="btn btn-primary mt20" icon="ADD">
+                                        <i class="fa fa-plus"></i> test상세
+                                    </button>
+                                    <button 
+                                        @click="isUpsertModal = true"
+                                        class="btn btn-primary mt20" icon="ADD">
                                         <i class="fa fa-plus"></i> 게시글 작성
                                     </button>
                                 </div>
@@ -127,11 +142,16 @@
                 </div>
             </div>
         </div>
+        <upsertModal v-model:show="isUpsertModal" modalId="upsertModal"/>
+        <getModal v-model:show="isGetModal" modalId="getModal"/>
     </div>
 </template>
 <script setup lang="ts">
 import { ref, defineProps, computed, onMounted} from 'vue';
 import axios from "@/axios";
+import upsertModal from '@/components/modals/boardUpsert.vue';
+import getModal from '@/components/modals/boardGet.vue';
+import paging from '@/components/common/paging.vue';
 
 interface Board { //게시판 리스트 데이터
     board_id: string;
@@ -151,24 +171,29 @@ const searchSaveType = ref('');//검색어 타입 저장
 
 const searchType = ref('board_title');//검색타입
 const searchText = ref('');//검색어
+
 const pageCurrent = ref<number>(1);//현재페이지
 const limitPage = ref<number>(5);//한페이지에 보여줄 데이터 개수
 
+//모달쪽
+const isUpsertModal = ref(false);//등록 수정 모달
+const isGetModal = ref(false);//상세보기 모달
+
 //리스트 요청
 const list = async (search : boolean) => {
-    if(search){
+
+    if(search){ //검색일경우 실행
         searchSaveText.value = searchText.value;
         searchSaveType.value = searchType.value;
     }
 
-    const param = {
+    const param = { //보낼 param
         offset: Number(limitPage.value) * (pageCurrent.value - 1), //현재 보고있는 페이지
         listSize: Number(limitPage.value), // 가져올 데이터의 개수
         searchType: searchSaveType.value,
         search: searchSaveText.value
     };
 
-    console.log(param);
     console.log(param);
 
 
@@ -182,7 +207,10 @@ const list = async (search : boolean) => {
 
         if (result.status === 200) {
             boardList.value = boardData.data;
-            totalCount.value = boardData.total;
+
+            //총페이지 계산
+            const totalPage = Math.ceil(boardData.total / limitPage.value);
+            totalCount.value = totalPage;
             
         }
     } catch (error) {

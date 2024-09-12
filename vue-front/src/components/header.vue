@@ -48,7 +48,7 @@
                         </div>
                         <!-- 사이드메뉴 보이는 아이콘 -->
                         <ul>
-                            <!-- 구성 -->
+                            <!-- 설정 -->
                             <li class="cog_menu"
                                 :class="{'on': monitorStore.isEdit}"
                                 @click="isSideMenu = true"><i class="fa fa-cog"></i></li>
