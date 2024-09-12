@@ -133,7 +133,7 @@
 import { ref, defineProps, computed, onMounted} from 'vue';
 import axios from "@/axios";
 
-interface Board {
+interface Board { //게시판 리스트 데이터
     board_id: string;
     board_title: string;
     user_id: string;
@@ -169,6 +169,7 @@ const list = async (search : boolean) => {
     };
 
     console.log(param);
+    console.log(param);
 
 
     try {
@@ -185,7 +186,7 @@ const list = async (search : boolean) => {
             
         }
     } catch (error) {
-        alert("보드리스트 통신에러");
+        alert("보드 리스트 통신에러");
     }
 }
 
